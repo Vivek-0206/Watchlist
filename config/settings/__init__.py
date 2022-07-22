@@ -1,3 +1,8 @@
-from .local_settings import *
-if DEBUG != True:
+from email.mime import image
+
+
+import os
+if 'ENVIRONMENT' in os.environ and os.environ['ENVIRONMENT'] == 'production':
     from .production_settings import *
+else:
+    from .local_settings import *
