@@ -17,7 +17,7 @@ SECRET_KEY = 'django-insecure-t#3y_2%8=jd38i%+e+6w9zvzp4l#d=dfje#_vih@2%#c2&rvw5
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'https://django-only-movie-api.herokuapp.com/',
+    'django-only-movie-api.herokuapp.com',
     '127.0.0.1',
     'localhost',
 ]
