@@ -5,6 +5,5 @@ from api.views import home_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('api.urls')),
-    path('', home_view, name='home'),
+    path('', include('api.urls')),
 ]
