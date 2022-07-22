@@ -27,11 +27,17 @@ def movie_detail(request, pk):
 def add_movie(request):
     if request.method == 'POST':
         data = request.POST
-        print('data: ', data)
-        movie = Movie(
-            name=data['name'], description=data['description'], is_active=data['is_active'])
-        movie.save()
-        return JsonResponse({'status': 'Movie Added'})
+        user = User.objects.filter(email=data['email'])
+        if user.exists():
+            if User.check_password(user, data['password']):
+                movie = Movie(
+                    name=data['name'], description=data['description'], is_active=data['is_active'])
+                movie.save()
+                return JsonResponse({'status': 'Movie Added'})
+            else:
+                return JsonResponse({'status': 'error check the credentials'})
+        else:
+            return JsonResponse({'status': 'error check the credentials'})
     return JsonResponse({'status': 'error'})
 
 
@@ -39,22 +45,40 @@ def add_movie(request):
 def edit_movie(request, pk):
     if request.method == 'POST':
         data = request.POST
-        movie = Movie.objects.get(pk=pk)
-        movie.name = data['name']
-        movie.description = data['description']
-        movie.is_active = data['is_active']
-        movie.save()
-        return JsonResponse({'status': 'Movie Updated'})
+        user = User.objects.filter(email=data['email'])
+        if user.exists():
+            if User.check_password(user, data['password']):
+                movie = Movie.objects.get(pk=pk)
+                movie.name = data['name']
+                movie.description = data['description']
+                movie.is_active = data['is_active']
+                movie.save()
+                return JsonResponse({'status': 'Movie Updated'})
+            else:
+                return JsonResponse({'status': 'error check the credentials'})
+        else:
+            return JsonResponse({'status': 'error check the credentials'})
     return JsonResponse({'status': 'error'})
 
 
 @csrf_exempt
 def delete_movie(request, pk):
-    movie = Movie.objects.get(pk=pk).exists()
-    if movie:
-        movie.is_deleted = True
-        return JsonResponse({'status': 'Movie Deleted'})
-    return JsonResponse({'status': 'ok'})
+    if request.method == 'POST':
+        data = request.POST
+        user = User.objects.filter(email=data['email'])
+        if user.exists():
+            if User.check_password(user, data['password']):
+                movie = Movie.objects.get(pk=pk).exists()
+                if movie:
+                    movie.is_deleted = True
+                    return JsonResponse({'status': 'Movie Deleted'})
+                else:
+                    return JsonResponse({'status': 'Movie not found'})
+            else:
+                return JsonResponse({'status': 'error check the credentials'})
+        else:
+            return JsonResponse({'status': 'error check the credentials'})
+    return JsonResponse({'status': 'error'})
 
 
 @csrf_exempt
@@ -76,8 +100,8 @@ def register(request):
 def login(request):
     if request.method == 'POST':
         data = request.POST
-        if User.objects.filter(email=data['email']).exists():
-            user = User.objects.get(email=data['email'])
+        user = User.objects.filter(email=data['email'])
+        if user.exists():
             if User.check_password(user, data['password']):
                 return JsonResponse({'status': 'Login Successful', 'name': user.name, 'email': user.email})
             else:
@@ -91,10 +115,11 @@ def login(request):
 def create_watchlist(request):
     if request.method == 'POST':
         data = request.POST
-        if User.objects.filter(email=data['email']).exists():
-            user = User.objects.get(email=data['email'])
+        user = User.objects.filter(email=data['email'])
+        if user.exists():
             if User.check_password(user, data['password']):
-                if Movie.objects.filter(id=data['movie_id']).exists():
+                movie = Movie.objects.filter(id=data['movie_id'])
+                if movie.exists():
                     movie = Movie.objects.get(id=data['movie_id'])
                     watchlist = Watchlist.objects.filter(
                         user=user, movie=movie)
@@ -117,8 +142,8 @@ def create_watchlist(request):
 def get_user_watchlists(request):
     if request.method == 'POST':
         data = request.POST
-        if User.objects.filter(email=data['email']).exists():
-            user = User.objects.get(email=data['email'])
+        user = User.objects.filter(email=data['email'])
+        if user.exists():
             if User.check_password(user, data['password']):
                 watchlist = list(Watchlist.objects.filter(user=user, is_deleted=False).values(
                     'movie__id', 'movie__name', 'movie__description', 'user__name'))
@@ -140,14 +165,14 @@ def get_user_watchlists(request):
 
 
 @csrf_exempt
-def delete_watchlist(request, pk):
+def delete_watchlist(request):
     if request.method == 'POST':
         data = request.POST
-        if User.objects.filter(email=data['email']).exists():
-            user = User.objects.get(email=data['email'])
+        user = User.objects.filter(email=data['email'])
+        if user.exists():
             if User.check_password(user, data['password']):
-                if Watchlist.objects.filter(pk=pk).exists():
-                    watchlist = Watchlist.objects.get(pk=pk)
+                if Watchlist.objects.filter(id=data['movie_id']).exists():
+                    watchlist = Watchlist.objects.get(id=data['movie_id'])
                     watchlist.is_deleted = True
                     return JsonResponse({'status': 'ok'})
                 else:
