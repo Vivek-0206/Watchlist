@@ -14,7 +14,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-t#3y_2%8=jd38i%+e+6w9zvzp4l#d=dfje#_vih@2%#c2&rvw5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'django-only-movie-api.herokuapp.com',
