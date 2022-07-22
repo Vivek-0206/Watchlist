@@ -18,6 +18,6 @@ urlpatterns = [
     path('api/create_watchlist/', create_watchlist, name='create_watchlist'),
     path('api/get_user_watchlists/', get_user_watchlists,
          name='get_user_watchlists'),
-    path('api/delete_watchlist/<int:pk>/',
-         delete_watchlist, name='delete_watchlist'),
+#     path('api/delete_watchlist/<int:pk>/',
+#          delete_watchlist, name='delete_watchlist'),
 ]

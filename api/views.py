@@ -33,6 +33,7 @@ def add_movie(request):
         data = request.POST
         user = User.objects.filter(email=data['email'])
         if user.exists():
+            user = User.objects.get(email=data['email'])
             if User.check_password(user, data['password']):
                 movie = Movie(
                     name=data['name'], description=data['description'], is_active=data['is_active'])
@@ -51,6 +52,7 @@ def edit_movie(request, pk):
         data = request.POST
         user = User.objects.filter(email=data['email'])
         if user.exists():
+            user = User.objects.get(email=data['email'])
             if User.check_password(user, data['password']):
                 movie = Movie.objects.get(pk=pk)
                 movie.name = data['name']
@@ -71,6 +73,7 @@ def delete_movie(request, pk):
         data = request.POST
         user = User.objects.filter(email=data['email'])
         if user.exists():
+            user = User.objects.get(email=data['email'])
             if User.check_password(user, data['password']):
                 movie = Movie.objects.get(pk=pk).exists()
                 if movie:
@@ -104,8 +107,9 @@ def register(request):
 def login(request):
     if request.method == 'POST':
         data = request.POST
-        user = User.objects.filter(email=data['email'])
+        user = User.objects.filter(email=data['email']).values()
         if user.exists():
+            user = User.objects.get(email=data['email'])
             if User.check_password(user, data['password']):
                 return JsonResponse({'status': 'Login Successful', 'name': user.name, 'email': user.email})
             else:
@@ -121,6 +125,7 @@ def create_watchlist(request):
         data = request.POST
         user = User.objects.filter(email=data['email'])
         if user.exists():
+            user = User.objects.get(email=data['email'])
             if User.check_password(user, data['password']):
                 movie = Movie.objects.filter(id=data['movie_id'])
                 if movie.exists():
@@ -148,6 +153,7 @@ def get_user_watchlists(request):
         data = request.POST
         user = User.objects.filter(email=data['email'])
         if user.exists():
+            user = User.objects.get(email=data['email'])
             if User.check_password(user, data['password']):
                 watchlist = list(Watchlist.objects.filter(user=user, is_deleted=False).values(
                     'movie__id', 'movie__name', 'movie__description', 'user__name'))
@@ -174,6 +180,7 @@ def delete_watchlist(request):
         data = request.POST
         user = User.objects.filter(email=data['email'])
         if user.exists():
+            user = User.objects.get(email=data['email'])
             if User.check_password(user, data['password']):
                 if Watchlist.objects.filter(id=data['movie_id']).exists():
                     watchlist = Watchlist.objects.get(id=data['movie_id'])
