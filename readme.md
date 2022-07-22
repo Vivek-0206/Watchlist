@@ -1,4 +1,4 @@
-Learning rest API from Pure Django
+Learning `restAPI` using `Django`
 
 CRUD application with basic authentication.
 
@@ -22,3 +22,13 @@ CRUD application with basic authentication.
 -   Create: POST `/api/create_watchlist/` **requires authentication**
 -   Read:
     -   POST `/api/get_user_watchlists/` **requires authentication**
+
+
+>Start Project
+1. `python -m venv venv`
+2. `source venv/bin/activate` | `venv/Scripts/activate`
+3. `pip install -r requirements.txt`
+4. `python manage.py migrate`
+5. `python manage.py runserver`
+
+> Deploy to Heroku

@@ -1,4 +1,3 @@
-import email
 from django.http import JsonResponse
 from .models import Movie, User, Watchlist
 from django.views.decorators.csrf import csrf_exempt
