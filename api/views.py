@@ -1,6 +1,11 @@
 from django.http import JsonResponse
+from django.shortcuts import render
 from .models import Movie, User, Watchlist
 from django.views.decorators.csrf import csrf_exempt
+
+
+def home_view(request):
+    return render(request, 'api/home.html')
 
 
 def movie_list(request):
